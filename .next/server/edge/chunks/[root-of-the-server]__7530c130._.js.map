@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/i18n/routing.ts"],"sourcesContent":["import { defineRouting } from 'next-intl/routing';\n\nexport const routing = defineRouting({\n  locales: ['en', 'fr', 'rw'],\n  defaultLocale: 'en',\n  localePrefix: 'always',\n});\n\nexport type Locale = (typeof routing.locales)[number];\n"],"names":[],"mappings":";;;;AAAA;;AAEO,MAAM,UAAU,IAAA,wKAAa,EAAC;IACnC,SAAS;QAAC;QAAM;QAAM;KAAK;IAC3B,eAAe;IACf,cAAc;AAChB"}},
-    {"offset": {"line": 35, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import createMiddleware from 'next-intl/middleware';\nimport { routing } from './i18n/routing';\n\nexport default createMiddleware(routing);\n\nexport const config = {\n  matcher: [\n    // Enable a redirect to a matching locale at the root\n    '/',\n    // Set a cookie to remember the previous locale for\n    // all requests that have a locale prefix\n    '/(en|fr|rw)/:path*',\n    // Enable redirects that add missing locales\n    // (e.g. `/pathnames` -> `/en/pathnames`)\n    '/((?!_next|_vercel|.*\\\\..*).*)',\n  ],\n};\n"],"names":[],"mappings":";;;;;;AAAA;AACA;;;uCAEe,IAAA,qKAAgB,EAAC,kIAAO;AAEhC,MAAM,SAAS;IACpB,SAAS;QACP,qDAAqD;QACrD;QACA,mDAAmD;QACnD,yCAAyC;QACzC;QACA,4CAA4C;QAC5C,yCAAyC;QACzC;KACD;AACH"}}]
-}
