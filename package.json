@@ -2,9 +2,6 @@
   "name": "newssummary-web",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
