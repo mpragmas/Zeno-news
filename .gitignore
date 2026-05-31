@@ -1,0 +1,42 @@
+# Environment files — never commit secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+
+.next/
+
+# Build output
+dist/
+build/
+
+# Prisma generated client (regenerated during build)
+backend/src/generated/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Expo
+.expo/
+*.apk
+Fronted/build-output.json
+
+# EAS local credentials (never commit)
+Fronted/credentials.json
+Fronted/*.jks
+Fronted/*.keystore
+*.apk
+
+# Allow committed env templates
+!.env.production.example

@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode — warm editorial "paper" palette */
+    --background: 40 30% 97%;           /* warm off-white paper */
+    --foreground: 24 13% 13%;           /* warm ink near-black */
+    --card: 40 36% 99%;                 /* crisp warm white */
+    --card-foreground: 24 13% 13%;
+    --popover: 40 36% 99%;
+    --popover-foreground: 24 13% 13%;
+    --primary: 222 67% 49%;             /* refined editorial blue */
+    --primary-foreground: 40 30% 98%;
+    --secondary: 36 24% 93%;            /* warm light fill */
+    --secondary-foreground: 24 13% 13%;
+    --muted: 36 24% 93%;
+    --muted-foreground: 28 8% 42%;      /* warm gray */
+    --accent: 36 26% 91%;
+    --accent-foreground: 24 13% 13%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 30% 98%;
+    --border: 34 17% 87%;               /* warm hairline */
+    --input: 34 17% 87%;
+    --ring: 222 67% 49%;
+    --radius: 0.625rem;
+
+    /* Custom semantic tokens */
+    --breaking: #c0392b;
+    --live: #15803d;
+    --trending: #b45309;
+    --surface: 40 30% 97%;
+  }
+
+  .dark {
+    /* Dark mode — warm charcoal editorial (not cold navy) */
+    --background: 24 10% 8%;            /* warm charcoal */
+    --foreground: 38 22% 90%;           /* warm paper text */
+    --card: 24 9% 11%;
+    --card-foreground: 38 22% 90%;
+    --popover: 24 9% 11%;
+    --popover-foreground: 38 22% 90%;
+    --primary: 217 90% 64%;             /* luminous blue */
+    --primary-foreground: 24 10% 8%;
+    --secondary: 24 7% 17%;
+    --secondary-foreground: 38 22% 90%;
+    --muted: 24 7% 17%;
+    --muted-foreground: 30 8% 60%;
+    --accent: 24 7% 20%;
+    --accent-foreground: 38 22% 90%;
+    --destructive: 0 62% 47%;
+    --destructive-foreground: 38 22% 90%;
+    --border: 30 6% 19%;
+    --input: 30 6% 19%;
+    --ring: 217 90% 64%;
+
+    --breaking: #e74c3c;
+    --live: #22c55e;
+    --trending: #d97706;
+    --surface: 24 10% 8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-balance;
+  }
+
+  /* Editorial display headline */
+  .font-display {
+    font-family: var(--font-serif), Georgia, serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+}
+
+@layer components {
+  /* News feed article styles */
+  .article-content {
+    @apply font-serif text-base leading-relaxed text-foreground;
+  }
+
+  .article-content h1,
+  .article-content h2,
+  .article-content h3,
+  .article-content h4 {
+    @apply font-sans font-bold text-foreground mt-6 mb-3;
+  }
+
+  .article-content h1 { @apply text-2xl; }
+  .article-content h2 { @apply text-xl; }
+  .article-content h3 { @apply text-lg; }
+
+  .article-content p {
+    @apply mb-4;
+  }
+
+  .article-content a {
+    @apply text-primary underline underline-offset-2 hover:text-primary/80;
+  }
+
+  .article-content ul,
+  .article-content ol {
+    @apply pl-6 mb-4 space-y-1;
+  }
+
+  .article-content ul {
+    @apply list-disc;
+  }
+
+  .article-content ol {
+    @apply list-decimal;
+  }
+
+  .article-content blockquote {
+    @apply border-l-4 border-primary pl-4 italic text-muted-foreground my-4;
+  }
+
+  .article-content code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  /* Breaking ticker animation */
+  .ticker-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-content {
+    display: inline-flex;
+    animation: ticker 40s linear infinite;
+    gap: 4rem;
+  }
+
+  .ticker-content:hover {
+    animation-play-state: paused;
+  }
+
+  /* Category eyebrow label — uppercase editorial tag */
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.12em];
+  }
+
+  /* Category badge colors (soft editorial tints) */
+  .category-politics { @apply bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300; }
+  .category-technology { @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300; }
+  .category-sports { @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300; }
+  .category-business { @apply bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300; }
+  .category-health { @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300; }
+  .category-entertainment { @apply bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300; }
+  .category-general { @apply bg-stone-200 text-stone-700 dark:bg-stone-800 dark:text-stone-300; }
+
+  /* Subtle dotted texture for branded image placeholders */
+  .placeholder-texture {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+
+  /* Glass morphism */
+  .glass {
+    @apply bg-white/80 dark:bg-card/80 backdrop-blur-md border border-border;
+  }
+
+  /* Reading progress bar */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: hsl(var(--primary));
+    z-index: 9999;
+    transition: width 0.1s ease;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
