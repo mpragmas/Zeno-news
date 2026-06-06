@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Clock, Layers, ExternalLink, BookOpen } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -55,6 +57,7 @@ export function StoryDetailSidebar({ story, locale }: StoryDetailSidebarProps) {
                 {article.url && (
                   <a
                     href={outboundHref(article.id)}
+                    suppressHydrationWarning
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-primary shrink-0 mt-0.5"
