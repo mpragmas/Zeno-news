@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Providers } from '@/components/common/Providers';
 import { LocaleSync } from '@/components/common/LocaleSync';
+import { AnalyticsBoot } from '@/components/common/AnalyticsBoot';
 import { AppShell } from '@/components/layout/AppShell';
 
 interface LocaleLayoutProps {

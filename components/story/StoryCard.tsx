@@ -1,14 +1,21 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { Bookmark, BookmarkCheck, Clock, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { getRelativeTime } from '@/lib/utils/date';
 import { useBookmarksStore } from '@/lib/stores/bookmarks.store';
 import { usePreferencesStore } from '@/lib/stores/preferences.store';
 import { StoryImage } from './StoryImage';
+import {
+  trackBookmark,
+  trackImpression,
+  trackUnbookmark,
+} from '@/lib/analytics/tracker';
 import type { Story } from '@/lib/types/story';
 
 const CATEGORY_TEXT: Record<string, string> = {
@@ -39,11 +46,31 @@ export function StoryCard({ story, variant = 'default', className }: StoryCardPr
   const categoryText = CATEGORY_TEXT[categoryKey] || CATEGORY_TEXT.general;
   const primarySource = story.sources?.[0]?.source ?? null;
 
+  // Fire a single viewport impression when the card first becomes visible.
+  const { ref: inViewRef, inView } = useInView({ threshold: 0.5, triggerOnce: true });
+  const trackedRef = useRef(false);
+  useEffect(() => {
+    if (inView && !trackedRef.current) {
+      trackedRef.current = true;
+      trackImpression({
+        clusterId: story.id,
+        source: primarySource ?? undefined,
+        category: story.category ?? undefined,
+        language: story.language,
+      });
+    }
+  }, [inView, story.id, story.category, story.language, primarySource]);
+
   function handleBookmark(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (bookmarked) removeBookmark(story.id);
-    else addBookmark(story);
+    if (bookmarked) {
+      removeBookmark(story.id);
+      trackUnbookmark({ clusterId: story.id });
+    } else {
+      addBookmark(story);
+      trackBookmark({ clusterId: story.id, category: story.category ?? undefined });
+    }
   }
 
   const MetaRow = (
@@ -70,7 +97,7 @@ export function StoryCard({ story, variant = 'default', className }: StoryCardPr
 
   if (variant === 'compact') {
     return (
-      <Link href={`/${locale}/story/${story.id}`} className="block h-full">
+      <Link ref={inViewRef} href={`/${locale}/story/${story.id}`} className="block h-full">
         <motion.div
           className={cn(
             'group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-foreground/15 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)]',
@@ -100,7 +127,7 @@ export function StoryCard({ story, variant = 'default', className }: StoryCardPr
   }
 
   return (
-    <Link href={`/${locale}/story/${story.id}`} className="block h-full">
+    <Link ref={inViewRef} href={`/${locale}/story/${story.id}`} className="block h-full">
       <motion.div
         className={cn(
           'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-foreground/15 hover:shadow-[0_14px_40px_-18px_rgba(0,0,0,0.3)]',

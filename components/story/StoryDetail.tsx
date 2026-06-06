@@ -13,6 +13,8 @@ import { useBookmarksStore } from '@/lib/stores/bookmarks.store';
 import { usePreferencesStore } from '@/lib/stores/preferences.store';
 import { getRelativeTime, formatDate } from '@/lib/utils/date';
 import { estimateReadingTime } from '@/lib/utils/reading';
+import { trackArticleOpen, trackBookmark, trackUnbookmark } from '@/lib/analytics/tracker';
+import { useEffect } from 'react';
 import type { StoryDetail as StoryDetailType } from '@/lib/types/story';
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -43,6 +45,26 @@ export function StoryDetail({ story }: StoryDetailProps) {
     (sum, a) => sum + estimateReadingTime(a.content),
     0
   );
+
+  // Record the story open once per mounted story.
+  useEffect(() => {
+    trackArticleOpen({
+      clusterId: story.id,
+      articleId: story.leadArticleId ?? undefined,
+      category: story.category ?? undefined,
+      language: story.language,
+    });
+  }, [story.id, story.leadArticleId, story.category, story.language]);
+
+  function toggleBookmark() {
+    if (bookmarked) {
+      removeBookmark(story.id);
+      trackUnbookmark({ clusterId: story.id });
+    } else {
+      addBookmark(story);
+      trackBookmark({ clusterId: story.id, category: story.category ?? undefined });
+    }
+  }
 
   return (
     <article className="max-w-2xl mx-auto px-4 py-6">
@@ -133,7 +155,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => (bookmarked ? removeBookmark(story.id) : addBookmark(story))}
+          onClick={toggleBookmark}
           className="gap-2"
         >
           {bookmarked ? (
@@ -152,7 +174,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
       {/* Source tabs with articles */}
       {articles.length > 0 ? (
-        <SourceTabs articles={articles} />
+        <SourceTabs articles={articles} clusterId={story.id} />
       ) : (
         <p className="text-muted-foreground text-sm">{t('noSummary')}</p>
       )}

@@ -12,6 +12,7 @@ export const config = {
     '/(en|fr|rw)/:path*',
     // Enable redirects that add missing locales
     // (e.g. `/pathnames` -> `/en/pathnames`)
-    '/((?!_next|_vercel|.*\\..*).*)',
+    // `admin` is excluded — the admin dashboard is non-localized.
+    '/((?!_next|_vercel|admin|.*\\..*).*)',
   ],
 };

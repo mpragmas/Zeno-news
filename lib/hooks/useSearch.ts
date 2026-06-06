@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getStories } from '@/lib/api/stories';
+import { trackSearch } from '@/lib/analytics/tracker';
 import type { Lang } from '@/lib/types/api';
 
 const RECENT_SEARCHES_KEY = 'newssummary-recent-searches';
@@ -72,6 +73,24 @@ export function useSearch(options: UseSearchOptions = {}) {
     enabled: debouncedQuery.length >= 2,
     staleTime: 1000 * 30,
   });
+
+  // Record each completed search (with its result count) exactly once.
+  const trackedQueryRef = useRef<string>('');
+  useEffect(() => {
+    if (
+      debouncedQuery.length >= 2 &&
+      !isFetching &&
+      data &&
+      trackedQueryRef.current !== debouncedQuery
+    ) {
+      trackedQueryRef.current = debouncedQuery;
+      trackSearch({
+        query: debouncedQuery,
+        resultCount: data.meta?.total ?? data.data?.length ?? 0,
+        language: lang,
+      });
+    }
+  }, [debouncedQuery, isFetching, data, lang]);
 
   const handleSearch = useCallback((value: string) => {
     setQuery(value);
