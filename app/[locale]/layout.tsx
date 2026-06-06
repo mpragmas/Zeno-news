@@ -39,6 +39,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <NextIntlClientProvider messages={messages}>
       <Providers>
         <LocaleSync />
+        <AnalyticsBoot />
         <AppShell>
           {children}
         </AppShell>
