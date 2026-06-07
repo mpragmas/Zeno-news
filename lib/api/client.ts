@@ -1,5 +1,7 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import type { ApiResponse } from '@/lib/types/api';
+import { getAuthToken, useAuthStore } from '@/lib/stores/auth.store';
+import { getGuestSessionId } from '@/lib/auth/guest';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://newssummaryapp-api.onrender.com/api/v1';
 
@@ -12,26 +14,38 @@ export const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor
+// Request interceptor — attach the auth token (or the guest session id when
+// signed out) so reading history and saved articles bind to the right owner.
 apiClient.interceptors.request.use(
   (config) => {
+    const token = getAuthToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      const guestId = getGuestSessionId();
+      if (guestId) config.headers['x-guest-session-id'] = guestId;
+    }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
-// Response interceptor — unwrap the API envelope
+// Response interceptor — unwrap errors and clear the session on auth failure.
 apiClient.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse<unknown>>) => {
-    return response;
-  },
+  (response: AxiosResponse<ApiResponse<unknown>>) => response,
   (error) => {
+    const status = error.response?.status;
+    // A 401 on an authenticated call means the token is stale — sign the user out.
+    if (status === 401 && getAuthToken()) {
+      try {
+        useAuthStore.getState().logout();
+      } catch {
+        // ignore — store may be unavailable during SSR
+      }
+    }
     const message = error.response?.data?.message || error.message || 'An error occurred';
-    const statusCode = error.response?.status;
-    return Promise.reject({ message, statusCode, original: error });
-  }
+    return Promise.reject({ message, statusCode: status, original: error });
+  },
 );
 
 export async function fetchApi<T>(

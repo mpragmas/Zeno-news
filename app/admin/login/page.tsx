@@ -2,21 +2,43 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BarChart3, KeyRound, Loader2 } from 'lucide-react';
+import { BarChart3, KeyRound, Loader2, ShieldAlert, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { setAdminKey, verifyAdminKey } from '@/lib/api/admin';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [key, setKey] = useState('');
+  const { signInWithCredentials } = useAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [showKey, setShowKey] = useState(false);
+  const [key, setKey] = useState('');
+  const [keyLoading, setKeyLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!key.trim()) return;
+    if (!username.trim() || !password) return;
     setLoading(true);
+    try {
+      await signInWithCredentials(username.trim(), password);
+      toast.success('Welcome back');
+      router.replace('/admin');
+    } catch {
+      toast.error('Invalid username or password');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleKeySubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!key.trim()) return;
+    setKeyLoading(true);
     const ok = await verifyAdminKey(key.trim());
-    setLoading(false);
+    setKeyLoading(false);
     if (ok) {
       setAdminKey(key.trim());
       toast.success('Welcome back');
@@ -34,47 +56,91 @@ export default function AdminLoginPage() {
             <BarChart3 className="h-6 w-6 text-white" />
           </div>
           <h1 className="font-display text-xl font-semibold text-foreground">
-            NewsSummary Analytics
+            Zeno News Admin
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Enter your admin key to access the dashboard
+            Sign in with your admin username and password
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 rounded-2xl border border-border bg-card p-6"
+          className="space-y-3 rounded-2xl border border-border bg-card p-6"
         >
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-medium text-muted-foreground">
-              Admin key
-            </span>
-            <div className="relative">
-              <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="password"
-                autoFocus
-                value={key}
-                onChange={(e) => setKey(e.target.value)}
-                placeholder="••••••••••••••••"
-                className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
-              />
-            </div>
-          </label>
-
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              autoFocus
+              autoComplete="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+            />
+          </div>
+          <div className="relative">
+            <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+            />
+          </div>
           <button
             type="submit"
-            disabled={loading || !key.trim()}
+            disabled={loading || !username.trim() || !password}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            {loading ? 'Verifying…' : 'Access dashboard'}
+            {loading ? 'Signing in…' : 'Sign in'}
           </button>
+
+          <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+            <ShieldAlert className="h-3.5 w-3.5" />
+            Admin accounts are pre-provisioned — there is no signup.
+          </p>
         </form>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          The key is stored locally and sent as <code>X-Admin-Key</code> on each request.
-        </p>
+        {/* Break-glass: manual admin key */}
+        <div className="mt-4 text-center">
+          {!showKey ? (
+            <button
+              onClick={() => setShowKey(true)}
+              className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+            >
+              Use an admin key instead
+            </button>
+          ) : (
+            <form
+              onSubmit={handleKeySubmit}
+              className="mt-2 space-y-3 rounded-2xl border border-border bg-card p-5 text-left"
+            >
+              <div className="relative">
+                <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="password"
+                  autoFocus
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                  placeholder="Admin key"
+                  className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={keyLoading || !key.trim()}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                {keyLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {keyLoading ? 'Verifying…' : 'Access dashboard'}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

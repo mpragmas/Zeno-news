@@ -1,0 +1,12 @@
+{
+  "name": "Zeno News",
+  "short_name": "Zeno News",
+  "description": "Stay informed with AI-powered news summaries from multiple sources across Africa and beyond.",
+  "icons": [
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#f8fafc",
+  "background_color": "#f8fafc",
+  "display": "standalone",
+  "start_url": "/"
+}

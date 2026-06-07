@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import type { Story } from '@/lib/types/story';
 import type { Article } from '@/lib/types/article';
 
-const APP_NAME = 'NewsSummary';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://newssummary.app';
+const APP_NAME = 'Zeno News';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://zeno-news.vercel.app';
 const DEFAULT_DESCRIPTION = 'Stay informed with AI-powered news summaries from multiple sources across Africa and beyond.';
-const DEFAULT_IMAGE = `${APP_URL}/og-image.jpg`;
+const DEFAULT_IMAGE = `${APP_URL}/og-image.png`;
 
 export function generateStoryMetadata(story: Story, locale: string): Metadata {
   const title = `${story.canonicalTitle} | ${APP_NAME}`;

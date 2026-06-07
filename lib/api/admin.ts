@@ -1,5 +1,6 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import type { ApiResponse } from '@/lib/types/api';
+import { getAuthToken } from '@/lib/stores/auth.store';
 import type {
   OverviewResponse,
   PublishersResponse,
@@ -40,8 +41,14 @@ const adminClient = axios.create({
 });
 
 adminClient.interceptors.request.use((config) => {
-  const key = getAdminKey();
-  if (key) config.headers['X-Admin-Key'] = key;
+  // Prefer the signed-in admin's JWT; fall back to a manually-entered admin key.
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    const key = getAdminKey();
+    if (key) config.headers['X-Admin-Key'] = key;
+  }
   return config;
 });
 

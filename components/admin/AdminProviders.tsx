@@ -3,6 +3,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/common/ThemeProvider';
+import { AuthBoot } from '@/components/common/AuthBoot';
 import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient({
@@ -20,6 +21,7 @@ export function AdminProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
+        <AuthBoot />
         {children}
         <Toaster
           position="top-right"

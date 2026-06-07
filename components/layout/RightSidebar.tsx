@@ -10,7 +10,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { LiveBadge } from '@/components/feed/LiveBadge';
 import Image from 'next/image';
 
 export function RightSidebar() {
@@ -25,14 +24,6 @@ export function RightSidebar() {
     <aside className="w-[300px] shrink-0">
       <ScrollArea className="h-[calc(100vh-4rem)] pr-1">
         <div className="space-y-6 py-4 pl-4">
-          {/* Live indicator */}
-          <div className="flex items-center gap-2">
-            <LiveBadge />
-            <span className="text-xs text-muted-foreground">Live updates enabled</span>
-          </div>
-
-          <Separator />
-
           {/* Trending section */}
           <section>
             <div className="flex items-center justify-between mb-3">

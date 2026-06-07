@@ -1,47 +1,37 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Fraunces } from 'next/font/google';
+// Self-hosted fonts (variable) — bundled locally so the build never depends on
+// fonts.googleapis.com, which is unreliable on some networks. The font-family
+// names ('Inter Variable' / 'Fraunces Variable') are wired to --font-sans /
+// --font-serif in globals.css.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces/full.css';
 import './globals.css';
-
-// UI + body: clean, neutral sans
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-// Editorial display: modern serif with character for headlines
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  axes: ['opsz', 'SOFT', 'WONK'],
-});
 
 export const metadata: Metadata = {
   title: {
-    default: 'NewsSummary — AI-Powered News from Multiple Sources',
-    template: '%s | NewsSummary',
+    default: 'Zeno News — Stay Informed in a Minute',
+    template: '%s | Zeno News',
   },
   description:
     'Stay informed with AI-powered news summaries aggregated from multiple sources across Africa and the world. Available in English, French, and Kinyarwanda.',
   keywords: ['news', 'Africa', 'Rwanda', 'AI summary', 'multilingual', 'journalism'],
-  authors: [{ name: 'NewsSummary' }],
-  creator: 'NewsSummary',
+  authors: [{ name: 'Zeno News' }],
+  creator: 'Zeno News',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['fr_FR', 'rw_RW'],
-    siteName: 'NewsSummary',
-    title: 'NewsSummary — AI-Powered News from Multiple Sources',
+    siteName: 'Zeno News',
+    title: 'Zeno News — Stay Informed in a Minute',
     description: 'AI-powered news summaries from multiple sources, available in English, French, and Kinyarwanda.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NewsSummary',
+    title: 'Zeno News',
     description: 'AI-powered multilingual news summaries.',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [{ url: '/logo.png', type: 'image/png' }],
     apple: '/apple-icon.png',
   },
   manifest: '/manifest.json',
@@ -62,11 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${fraunces.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased">
         {children}
       </body>

@@ -3,18 +3,19 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
 import {
   Home,
   Compass,
   Bookmark,
   User,
   Settings,
-  Newspaper,
   Keyboard,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { AccountMenu } from '@/components/auth/AccountMenu';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 
@@ -40,15 +41,19 @@ export function Sidebar() {
     <aside className="flex h-full w-60 flex-col border-r border-border bg-card">
       {/* Logo */}
       <div className="flex h-16 items-center gap-2.5 px-5 border-b border-border">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-sm">
-          <Newspaper className="h-[18px] w-[18px] text-white" />
-        </div>
+        <Image
+          src="/logo.png"
+          alt="Zeno News"
+          width={36}
+          height={36}
+          className="h-9 w-9 rounded-xl object-contain"
+        />
         <div>
           <span className="font-display text-lg font-semibold leading-none tracking-tight text-foreground">
-            NewsSummary
+            Zeno News
           </span>
           <div className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground leading-none">
-            AI News Digest
+            Stay informed in a minute
           </div>
         </div>
       </div>
@@ -87,6 +92,8 @@ export function Sidebar() {
 
       {/* Bottom controls */}
       <div className="p-3 space-y-2">
+        <AccountMenu />
+
         <div className="flex items-center justify-between px-2">
           <LanguageSwitcher variant="full" />
           <ThemeToggle />

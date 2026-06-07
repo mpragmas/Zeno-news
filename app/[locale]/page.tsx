@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: HomePageProps) {
   const t = await getTranslations({ locale, namespace: 'home' });
 
   return {
-    title: 'NewsSummary — AI-Powered Multilingual News',
+    title: 'Zeno News — AI-Powered Multilingual News',
     description: 'Stay informed with AI-powered news summaries from multiple sources. Available in English, French, and Kinyarwanda.',
   };
 }

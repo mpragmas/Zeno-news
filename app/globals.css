@@ -31,6 +31,13 @@
     --live: #15803d;
     --trending: #b45309;
     --surface: 40 30% 97%;
+
+    /* Fonts — self-hosted via @fontsource-variable (see app/layout.tsx).
+       Avoids the build-time dependency on fonts.googleapis.com. */
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system,
+      'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-serif: 'Fraunces Variable', ui-serif, Georgia, Cambria,
+      'Times New Roman', Times, serif;
   }
 
   .dark {

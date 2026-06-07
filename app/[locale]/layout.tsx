@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing';
 import { Providers } from '@/components/common/Providers';
 import { LocaleSync } from '@/components/common/LocaleSync';
 import { AnalyticsBoot } from '@/components/common/AnalyticsBoot';
+import { AuthBoot } from '@/components/common/AuthBoot';
 import { AppShell } from '@/components/layout/AppShell';
 
 interface LocaleLayoutProps {
@@ -40,6 +41,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <Providers>
         <LocaleSync />
         <AnalyticsBoot />
+        <AuthBoot />
         <AppShell>
           {children}
         </AppShell>

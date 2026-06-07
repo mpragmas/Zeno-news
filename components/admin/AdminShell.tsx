@@ -28,6 +28,7 @@ import {
   useAdminFilter,
 } from './AdminFilterContext';
 import { clearAdminKey, getAdminKey } from '@/lib/api/admin';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 const NAV = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
@@ -59,19 +60,22 @@ export function useRegisterExport(fn: () => void) {
 
 export function AdminShell(props: AdminShellProps) {
   const router = useRouter();
-  const [authed, setAuthed] = useState<boolean | null>(null);
+  const { isAdmin, hydrated } = useAuth();
+  const [legacyKey, setLegacyKey] = useState(false);
 
-  // Client-side gate — the API still enforces the key on every request.
   useEffect(() => {
-    if (getAdminKey()) {
-      setAuthed(true);
-    } else {
-      setAuthed(false);
+    setLegacyKey(!!getAdminKey());
+  }, []);
+
+  // Client-side gate — the API still enforces admin access on every request.
+  const authorized = isAdmin || legacyKey;
+  useEffect(() => {
+    if (hydrated && !authorized) {
       router.replace('/admin/login');
     }
-  }, [router]);
+  }, [hydrated, authorized, router]);
 
-  if (authed !== true) {
+  if (!hydrated || !authorized) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-border border-t-primary" />
@@ -89,6 +93,7 @@ export function AdminShell(props: AdminShellProps) {
 function ShellInner({ title, description, children }: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { signOut } = useAuth();
   const [exporter, setExporter] = useState<(() => void) | null>(null);
   const register = useCallback((fn: (() => void) | null) => setExporter(() => fn), []);
   const exportCtx = useMemo(() => register, [register]);
@@ -99,6 +104,7 @@ function ShellInner({ title, description, children }: AdminShellProps) {
   }
 
   function logout() {
+    signOut();
     clearAdminKey();
     router.replace('/admin/login');
   }
@@ -117,7 +123,7 @@ function ShellInner({ title, description, children }: AdminShellProps) {
                 Analytics
               </span>
               <div className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                NewsSummary Admin
+                Zeno News Admin
               </div>
             </div>
           </div>

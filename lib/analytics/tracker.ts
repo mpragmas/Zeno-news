@@ -3,7 +3,7 @@
  *
  * Design goals (mirrors the backend contract):
  *   • never block the UI — events are buffered and flushed in batches
- *   • survive navigation/tab-close — flush via `sendBeacon` on pagehide
+ *   • survive navigation/tab-close — flush via keepalive `fetch` on pagehide
  *   • privacy-first — only an anonymous, device-local id is stored; no PII
  *
  * The same anonymous id doubles as the backend "sessionId"; the server splits
@@ -11,6 +11,7 @@
  */
 
 import type { AnalyticsEventType, TrackEvent } from '@/lib/types/analytics';
+import { getAuthToken } from '@/lib/stores/auth.store';
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -53,20 +54,6 @@ export function getSessionId(): string {
   }
 }
 
-/** Optional bearer token, if the app ever stores one. Safe no-op otherwise. */
-function getAuthToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    return (
-      localStorage.getItem('newssummary-token') ||
-      localStorage.getItem('auth-token') ||
-      null
-    );
-  } catch {
-    return null;
-  }
-}
-
 function ensureListeners() {
   if (listenersBound || typeof window === 'undefined') return;
   listenersBound = true;
@@ -85,7 +72,7 @@ function scheduleFlush() {
   }, FLUSH_INTERVAL_MS);
 }
 
-/** Send everything currently queued. Uses sendBeacon when possible. */
+/** Send everything currently queued via a non-credentialed keepalive fetch. */
 export function flush(): void {
   if (typeof window === 'undefined' || queue.length === 0) return;
 
@@ -100,17 +87,11 @@ export function flush(): void {
   const payload = JSON.stringify({ events });
   const token = getAuthToken();
 
-  // sendBeacon can't set Authorization, so authenticated users go via fetch.
-  if (!token && typeof navigator !== 'undefined' && navigator.sendBeacon) {
-    try {
-      const blob = new Blob([payload], { type: 'application/json' });
-      const ok = navigator.sendBeacon(url, blob);
-      if (ok) return;
-    } catch {
-      // fall through to fetch
-    }
-  }
-
+  // NOTE: we intentionally do NOT use navigator.sendBeacon here. sendBeacon
+  // always sends with credentials mode "include", which requires the server to
+  // return `Access-Control-Allow-Credentials: true`. Auth is Bearer-based (no
+  // cookies), so we send a non-credentialed `fetch` with `keepalive: true` —
+  // it survives page unload and passes CORS with a reflected origin.
   try {
     void fetch(url, {
       method: 'POST',
@@ -120,6 +101,7 @@ export function flush(): void {
       },
       body: payload,
       keepalive: true,
+      credentials: 'omit',
     }).catch(() => undefined);
   } catch {
     // Analytics must never throw into product code.

@@ -165,7 +165,7 @@ export default function SettingsPage() {
             <button className="text-primary hover:underline">{t('termsOfService')}</button>
           </div>
           <p className="text-xs text-muted-foreground">
-            NewsSummary uses AI to aggregate and summarize news from multiple sources across Africa and the world.
+            Zeno News uses AI to aggregate and summarize news from multiple sources across Africa and the world.
             Available in English, French, and Kinyarwanda.
           </p>
         </CardContent>
