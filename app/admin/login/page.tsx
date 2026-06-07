@@ -26,8 +26,16 @@ export default function AdminLoginPage() {
       await signInWithCredentials(username.trim(), password);
       toast.success('Welcome back');
       router.replace('/admin');
-    } catch {
-      toast.error('Invalid username or password');
+    } catch (err: unknown) {
+      const status = (err as { statusCode?: number })?.statusCode;
+      if (status === 404) {
+        toast.error(
+          'Admin login is not available on this API yet. Redeploy the backend, or point NEXT_PUBLIC_API_BASE_URL to a local server (http://localhost:4000/api/v1).',
+          { duration: 8000 },
+        );
+      } else {
+        toast.error('Invalid username or password');
+      }
     } finally {
       setLoading(false);
     }

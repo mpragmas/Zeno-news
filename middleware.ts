@@ -1,7 +1,21 @@
 import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
 
-export default createMiddleware(routing);
+const intlMiddleware = createMiddleware(routing);
+
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Admin routes are non-localized — redirect /en/admin/* → /admin/*
+  const localeAdmin = pathname.match(/^\/(en|fr|rw)\/admin(\/.*)?$/);
+  if (localeAdmin) {
+    const suffix = localeAdmin[2] ?? '';
+    return NextResponse.redirect(new URL(`/admin${suffix}`, request.url));
+  }
+
+  return intlMiddleware(request);
+}
 
 export const config = {
   matcher: [

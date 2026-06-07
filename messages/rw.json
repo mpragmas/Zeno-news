@@ -137,7 +137,8 @@
     "welcome": "Murakaza neza, {name}",
     "privacyNote": "Dukoresha gusa konti yawe ya Google kugira ngo dukore umwirondoro wawe.",
     "profile": "Umwirondoro",
-    "adminDashboard": "Ububiko bw'ubuyobozi"
+    "adminDashboard": "Ububiko bw'ubuyobozi",
+    "adminSignIn": "Injira nk'umuyobozi"
   },
   "errors": {
     "notFound": "Urupapuro ntiruboneka",

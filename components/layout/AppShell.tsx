@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { RightSidebar } from './RightSidebar';
 import { TopBar } from './TopBar';
@@ -15,6 +16,9 @@ interface AppShellProps {
 
 export function AppShell({ children, showRightSidebar = true }: AppShellProps) {
   useKeyboardShortcuts();
+  const pathname = usePathname();
+  const isStoryPage = /\/story\/[^/]+$/.test(pathname);
+  const rightSidebar = showRightSidebar && !isStoryPage;
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,7 +38,7 @@ export function AppShell({ children, showRightSidebar = true }: AppShellProps) {
         </main>
 
         {/* Right sidebar */}
-        {showRightSidebar && (
+        {rightSidebar && (
           <div className="shrink-0 border-l border-border">
             <RightSidebar />
           </div>

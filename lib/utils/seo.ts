@@ -8,7 +8,7 @@ const DEFAULT_DESCRIPTION = 'Stay informed with AI-powered news summaries from m
 const DEFAULT_IMAGE = `${APP_URL}/og-image.png`;
 
 export function generateStoryMetadata(story: Story, locale: string): Metadata {
-  const title = `${story.canonicalTitle} | ${APP_NAME}`;
+  const title = story.canonicalTitle;
   const description = story.canonicalSummary?.substring(0, 160) || DEFAULT_DESCRIPTION;
   const image = story.imageUrl || DEFAULT_IMAGE;
   const url = `${APP_URL}/${locale}/story/${story.id}`;
@@ -38,7 +38,7 @@ export function generateStoryMetadata(story: Story, locale: string): Metadata {
 }
 
 export function generateArticleMetadata(article: Article, locale: string): Metadata {
-  const title = `${article.title} | ${APP_NAME}`;
+  const title = article.title;
   const description = article.summary?.substring(0, 160) || DEFAULT_DESCRIPTION;
   const image = article.imageUrl || DEFAULT_IMAGE;
   const url = `${APP_URL}/${locale}/article/${article.id}`;

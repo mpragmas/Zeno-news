@@ -1,7 +1,6 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import type { ApiResponse } from '@/lib/types/api';
-import { getAuthToken, useAuthStore } from '@/lib/stores/auth.store';
-import { getGuestSessionId } from '@/lib/auth/guest';
+import { getAuthToken, getGuestSessionId } from '@/lib/auth/session';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://newssummaryapp-api.onrender.com/api/v1';
 
@@ -37,11 +36,10 @@ apiClient.interceptors.response.use(
     const status = error.response?.status;
     // A 401 on an authenticated call means the token is stale — sign the user out.
     if (status === 401 && getAuthToken()) {
-      try {
-        useAuthStore.getState().logout();
-      } catch {
-        // ignore — store may be unavailable during SSR
-      }
+      // Dynamic import keeps the auth store out of the server bundle.
+      void import('@/lib/stores/auth.store')
+        .then(({ useAuthStore }) => useAuthStore.getState().logout())
+        .catch(() => undefined);
     }
     const message = error.response?.data?.message || error.message || 'An error occurred';
     return Promise.reject({ message, statusCode: status, original: error });

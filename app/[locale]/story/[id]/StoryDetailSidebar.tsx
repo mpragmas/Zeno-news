@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { estimateReadingTime } from '@/lib/utils/reading';
 import { formatDate } from '@/lib/utils/date';
-import { outboundHref } from '@/lib/analytics/tracker';
+import { OutboundLink } from '@/components/common/OutboundLink';
 import type { StoryDetail } from '@/lib/types/story';
 
 interface StoryDetailSidebarProps {
@@ -55,16 +55,15 @@ export function StoryDetailSidebar({ story, locale }: StoryDetailSidebarProps) {
                   </p>
                 </div>
                 {article.url && (
-                  <a
-                    href={outboundHref(article.id)}
-                    suppressHydrationWarning
+                  <OutboundLink
+                    articleId={article.id}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-primary shrink-0 mt-0.5"
                     aria-label={`Read original at ${article.source}`}
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
+                  </OutboundLink>
                 )}
               </div>
             ))}

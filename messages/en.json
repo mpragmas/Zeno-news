@@ -137,7 +137,8 @@
     "welcome": "Welcome, {name}",
     "privacyNote": "We only use your Google account to create your profile.",
     "profile": "Profile",
-    "adminDashboard": "Admin dashboard"
+    "adminDashboard": "Admin dashboard",
+    "adminSignIn": "Admin sign in"
   },
   "errors": {
     "notFound": "Page not found",

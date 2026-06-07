@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -99,6 +100,12 @@ function SignedOut({
             <GoogleSignInButton onCredential={handleCredential} />
           )}
           <p className="text-xs text-muted-foreground">{t('privacyNote')}</p>
+          <Link
+            href="/admin/login"
+            className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+          >
+            {t('adminSignIn')}
+          </Link>
         </CardContent>
       </Card>
     </div>

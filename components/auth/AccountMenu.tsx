@@ -84,6 +84,12 @@ export function AccountMenu() {
               <p className="text-center text-xs text-muted-foreground">
                 {t('privacyNote')}
               </p>
+              <Link
+                href="/admin/login"
+                className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+              >
+                {t('adminSignIn')}
+              </Link>
             </div>
           </DialogContent>
         </Dialog>

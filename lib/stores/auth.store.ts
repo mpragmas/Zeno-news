@@ -34,14 +34,8 @@ export const useAuthStore = create<AuthStore>()(
   ),
 );
 
-/** Synchronous token read for the axios interceptor (safe on the server → null). */
-export function getAuthToken(): string | null {
-  try {
-    return useAuthStore.getState().token;
-  } catch {
-    return null;
-  }
-}
+/** Synchronous token read for client code (re-exported from session helpers). */
+export { getAuthToken } from '@/lib/auth/session';
 
 export function isAdmin(): boolean {
   try {

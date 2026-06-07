@@ -137,7 +137,8 @@
     "welcome": "Bienvenue, {name}",
     "privacyNote": "Nous utilisons uniquement votre compte Google pour créer votre profil.",
     "profile": "Profil",
-    "adminDashboard": "Tableau de bord admin"
+    "adminDashboard": "Tableau de bord admin",
+    "adminSignIn": "Connexion administrateur"
   },
   "errors": {
     "notFound": "Page introuvable",

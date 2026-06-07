@@ -9,7 +9,8 @@ import type { Article } from '@/lib/types/article';
 import { formatDate } from '@/lib/utils/date';
 import { estimateReadingTime } from '@/lib/utils/reading';
 import { Badge } from '@/components/ui/badge';
-import { outboundHref, trackSourceSwitch } from '@/lib/analytics/tracker';
+import { trackSourceSwitch } from '@/lib/analytics/tracker';
+import { OutboundLink } from '@/components/common/OutboundLink';
 
 interface SourceTabsProps {
   articles: Article[];
@@ -96,15 +97,15 @@ export function SourceTabs({ articles, clusterId }: SourceTabsProps) {
 
                 {/* Read original link — routed through the outbound tracker */}
                 {article.url && (
-                  <a
-                    href={outboundHref(article.id)}
+                  <OutboundLink
+                    articleId={article.id}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
                   >
                     <ExternalLink className="h-4 w-4" />
                     {t('readOriginal')} {article.source}
-                  </a>
+                  </OutboundLink>
                 )}
               </motion.div>
             )}
