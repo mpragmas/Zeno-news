@@ -64,7 +64,21 @@
     "tip": "Try different keywords or filters",
     "searching": "Searching...",
     "clearFilters": "Clear filters",
-    "resultsFor": "Results for"
+    "resultsFor": "Results for",
+    "allRegions": "All regions",
+    "allCategories": "All categories",
+    "regionAfrica": "Africa",
+    "regionRwanda": "Rwanda",
+    "regionGlobal": "Global",
+    "catPolitics": "Politics",
+    "catTechnology": "Technology",
+    "catBusiness": "Business",
+    "catSports": "Sports",
+    "catHealth": "Health",
+    "catEntertainment": "Entertainment",
+    "browseTitle": "Browse the latest stories",
+    "browseDescription": "Use the filters below or search by topic, country or source.",
+    "latestStories": "Latest stories"
   },
   "bookmarks": {
     "title": "Bookmarks",
@@ -100,7 +114,8 @@
     "sortBy": "Sort by",
     "newest": "Newest",
     "mostRead": "Most read",
-    "mostSources": "Most sources"
+    "mostSources": "Most sources",
+    "subtitle": "Discover stories from across Africa and the world"
   },
   "profile": {
     "title": "Profile",

@@ -64,7 +64,21 @@
     "tip": "Essayez des mots-clés ou filtres différents",
     "searching": "Recherche...",
     "clearFilters": "Effacer les filtres",
-    "resultsFor": "Résultats pour"
+    "resultsFor": "Résultats pour",
+    "allRegions": "Toutes les régions",
+    "allCategories": "Toutes les catégories",
+    "regionAfrica": "Afrique",
+    "regionRwanda": "Rwanda",
+    "regionGlobal": "Monde",
+    "catPolitics": "Politique",
+    "catTechnology": "Technologie",
+    "catBusiness": "Affaires",
+    "catSports": "Sports",
+    "catHealth": "Santé",
+    "catEntertainment": "Divertissement",
+    "browseTitle": "Parcourir les dernières histoires",
+    "browseDescription": "Utilisez les filtres ci-dessous ou recherchez par sujet, pays ou source.",
+    "latestStories": "Dernières histoires"
   },
   "bookmarks": {
     "title": "Signets",
@@ -100,7 +114,8 @@
     "sortBy": "Trier par",
     "newest": "Plus récent",
     "mostRead": "Plus lu",
-    "mostSources": "Plus de sources"
+    "mostSources": "Plus de sources",
+    "subtitle": "Découvrez des histoires de toute l’Afrique et du monde"
   },
   "profile": {
     "title": "Profil",

@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Loader2 } from 'lucide-react';
 import { StoryCard } from '@/components/story/StoryCard';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,9 +12,17 @@ interface SearchResultsProps {
   isLoading: boolean;
   query: string;
   totalResults: number;
+  /** Browse mode shows the latest stories before any query is typed. */
+  browse?: boolean;
 }
 
-export function SearchResults({ results, isLoading, query, totalResults }: SearchResultsProps) {
+export function SearchResults({
+  results,
+  isLoading,
+  query,
+  totalResults,
+  browse = false,
+}: SearchResultsProps) {
   const t = useTranslations('search');
 
   if (isLoading) {
@@ -32,12 +39,13 @@ export function SearchResults({ results, isLoading, query, totalResults }: Searc
     );
   }
 
-  if (!query) {
+  // No query typed yet and browse mode is off → invite the user to search.
+  if (!query && !browse) {
     return (
       <EmptyState
         icon={Search}
-        title="Search news stories"
-        description="Enter a keyword, topic, or source name to find stories from our database."
+        title={t('browseTitle')}
+        description={t('browseDescription')}
       />
     );
   }
@@ -47,7 +55,11 @@ export function SearchResults({ results, isLoading, query, totalResults }: Searc
       <EmptyState
         icon={Search}
         title={t('noResults')}
-        description={`${t('tip')} — try "${query.split(' ')[0]}" or similar terms`}
+        description={
+          query
+            ? `${t('tip')} — "${query.split(' ')[0]}"`
+            : t('tip')
+        }
       />
     );
   }
@@ -55,9 +67,18 @@ export function SearchResults({ results, isLoading, query, totalResults }: Searc
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        {t('resultsFor')}{' '}
-        <strong className="text-foreground">"{query}"</strong>{' '}
-        — {totalResults.toLocaleString()} stories
+        {query ? (
+          <>
+            {t('resultsFor')}{' '}
+            <strong className="text-foreground">&ldquo;{query}&rdquo;</strong>{' '}
+            — {totalResults.toLocaleString()}
+          </>
+        ) : (
+          <>
+            <strong className="text-foreground">{t('latestStories')}</strong>{' '}
+            — {totalResults.toLocaleString()}
+          </>
+        )}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {results.map((story) => (

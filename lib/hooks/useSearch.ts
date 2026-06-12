@@ -38,11 +38,23 @@ interface UseSearchOptions {
   lang?: Lang;
   category?: string;
   region?: string;
+  continent?: string;
+  country?: string;
+  /** When true, fetch the latest stories even before a query is typed (browse mode). */
+  browse?: boolean;
   debounceMs?: number;
 }
 
 export function useSearch(options: UseSearchOptions = {}) {
-  const { lang = 'en', category = '', region = '', debounceMs = 300 } = options;
+  const {
+    lang = 'en',
+    category = '',
+    region = '',
+    continent = '',
+    country = '',
+    browse = false,
+    debounceMs = 300,
+  } = options;
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -61,16 +73,19 @@ export function useSearch(options: UseSearchOptions = {}) {
   }, [query, debounceMs]);
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['search', debouncedQuery, lang, category, region],
+    queryKey: ['search', debouncedQuery, lang, category, region, continent, country, browse],
     queryFn: () =>
       getStories({
-        query: debouncedQuery,
+        query: debouncedQuery || undefined,
         lang,
         category: category || undefined,
         region: region || undefined,
+        continent: continent || undefined,
+        country: country || undefined,
         limit: 20,
       }),
-    enabled: debouncedQuery.length >= 2,
+    // Browse mode loads the latest stories immediately; otherwise wait for a 2+ char query.
+    enabled: browse || debouncedQuery.length >= 2,
     staleTime: 1000 * 30,
   });
 

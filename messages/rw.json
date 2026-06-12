@@ -64,7 +64,21 @@
     "tip": "Gerageza amagambo cyangwa shungura bitandukanye",
     "searching": "Gushakisha...",
     "clearFilters": "Siba shungura",
-    "resultsFor": "Ibisubizo bya"
+    "resultsFor": "Ibisubizo bya",
+    "allRegions": "Uduce twose",
+    "allCategories": "Ibyiciro byose",
+    "regionAfrica": "Afurika",
+    "regionRwanda": "u Rwanda",
+    "regionGlobal": "Isi yose",
+    "catPolitics": "Politiki",
+    "catTechnology": "Ikoranabuhanga",
+    "catBusiness": "Ubucuruzi",
+    "catSports": "Siporo",
+    "catHealth": "Ubuzima",
+    "catEntertainment": "Imyidagaduro",
+    "browseTitle": "Reba inkuru ziheruka",
+    "browseDescription": "Koresha uduce two hasi cyangwa ushakishe ku ngingo, igihugu cyangwa inkomoko.",
+    "latestStories": "Inkuru ziheruka"
   },
   "bookmarks": {
     "title": "Ibikwa",
@@ -100,7 +114,8 @@
     "sortBy": "Shyira mu buryo",
     "newest": "Isha",
     "mostRead": "Isomwa cyane",
-    "mostSources": "Inkomoko nyinshi"
+    "mostSources": "Inkomoko nyinshi",
+    "subtitle": "Sura inkuru ziva muri Afurika no ku isi yose"
   },
   "profile": {
     "title": "Umwirondoro",
